@@ -1,5 +1,5 @@
-# simple twitch bot v 1.0
-# using python 2.7
+# bot.py
+# The code for bot (using python 2.7)
 
 import config
 import utils
@@ -19,9 +19,10 @@ def main():
     s.send("JOIN {}\r\n".format(config.CHAN).encode("utf-8"))
 
     chat_message = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
-    utils.mess(s, "What's up, everybody?")
+    utils.chat(s, "What's up, everybody?")
 
-    thread.start_new_thread(utils.fillOpList, ())
+    thread.start_new_thread(utils.threadfillOpList(), ())
+
     while True:
         response = s.recv(1024).decode(("utf-8"))
         if response == "PING :tmi.twitch.tv\r\n":
@@ -31,12 +32,12 @@ def main():
             message = chat_message.sub("", response)
             print(response)
 
-
+            # Custom commands
             if message.strip() == "!time":
-                utils.mess(s, "it's currently" + time.strftime("%I:%M %p %Z on %A %B %d %Y"))
+                utils.chat(s, "it's currently" + time.strftime("%I:%M %p %Z on %A, %B %d, %Y."))
             if message.strip() == "!messages" and utils.isOp(username):
-                utils.mess(s, "Hello there!")
-                utils.mess(s, "Press follow button! This really helps me :-)")
+                utils.chat(s, "Hello there!")
+                utils.chat(s, "Press follow button! This really helps me :-)")
             sleep(1)
 
 
